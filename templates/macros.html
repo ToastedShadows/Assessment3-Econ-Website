@@ -1,0 +1,96 @@
+<!-- Macros are pretty much just the functions of HTML -->
+{% macro render_form_start(action, method='POST', enctype=None) %}
+    <form method="{{ method }}" action="{{ url_for(action) }}" {% if enctype %}enctype="{{ enctype }}"{% endif %}>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{% endmacro %}
+
+{% macro render_form_end() %}
+    </form>
+{% endmacro %}
+
+{% macro render_input(name, type='text', placeholder='', value='', required=false, autocomplete=None, accept=None) %}
+    <input type="{{ type }}" 
+           name="{{ name }}" 
+           placeholder="{{ placeholder }}" 
+           class="input-field" 
+           value="{{ value }}"
+           {% if required %}required{% endif %}
+           {% if autocomplete %}autocomplete="{{ autocomplete }}"{% endif %}
+           {% if accept %}accept="{{ accept }}"{% endif %}>
+{% endmacro %}
+
+{% macro render_button(text, type='submit', href=None) %}
+    {% if href %}
+        <a href="{{ url_for(href) }}"><button type="{{ type }}">{{ text }}</button></a>
+    {% else %}
+        <button type="{{ type }}">{{ text }}</button>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_file_input(name, label) %}
+    <div class="file-input-wrapper">
+        <input type="file" name="{{ name }}" id="{{ name }}" accept=".png,.jpg,.jpeg,.gif">
+        <label for="{{ name }}">{{ label }}</label>
+    </div>
+{% endmacro %}
+
+{% macro render_navbar() %}
+    <div class="nav-buttons">
+        <div class="left-buttons">
+            {% if session.get('user_id') %}
+                <button onclick="window.location.href='/user_dashboard'">Dashboard</button>
+            {% endif %}
+            <button onclick="window.location.href='/'">Home</button>
+        </div>
+        <h1 id="main-title">KRAMPUS</h1>
+        {% if session.get('user_id') %}
+            <button onclick="window.location.href='/logout'">Sign Out</button>
+        {% else %}
+            <button onclick="window.location.href='/login'">Login</button>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro render_product_card(product) %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-link">{{ product.name }}</a>
+                </h5>
+                <p class="card-text">Price: ${{ "%.2f"|format(product.price) }}</p>
+                <h5 class="card-title">In Stock: {{ product.available_quantity }} / 50</h5>
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" alt="{{ product.name }}" class="product-image">
+                </div>
+                <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-primary">Add to Cart</a>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_cart_item(item) %}
+    <div class="cart-item">
+        <h5>{{ item.name }}</h5>
+        <div class="cart-item-content">
+            <div class="cart-item-image">
+                <img src="{{ url_for('static', filename='uploads/' ~ item.image) }}" alt="{{ item.name }}" class="product-image">
+                <a href="{{ url_for('remove_from_cart', product_id=item.id) }}" class="btn btn-danger">Remove</a>
+            </div>
+            <div class="cart-item-details">
+                <p>Price: ${{ "%.2f"|format(item.price) }}</p>
+                <p>Quantity: {{ item.quantity }}</p>
+                <p>Subtotal: ${{ "%.2f"|format(item.price * item.quantity) }}</p>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_page_header(title) %}
+    <div class="container p-4">
+        <h1 class="mb-4">{{ title }}</h1>
+{% endmacro %}
+
+{% macro render_page_footer() %}
+    </div>
+{% endmacro %} 

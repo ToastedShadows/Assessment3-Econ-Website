@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - KRAMPUS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='static.css') }}">
+</head>
+<body>
+    {% from "macros.html" import render_navbar %}
+    {{ render_navbar() }}
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Order History</h2>
+            </div>
+            <div class="card-body">
+                {% if orders %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order Date</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>{{ order.order_date }}</td>
+                                <td>{{ order.items }}</td>
+                                <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No orders found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

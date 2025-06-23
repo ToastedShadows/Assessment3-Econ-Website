@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Creation Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='static.css') }}">
+</head>
+<body>
+
+  {% from "macros.html" import render_navbar, render_product_card %}
+  {{ render_navbar() }}
+
+    <h1 class="form-heading">Create a new account:</h1>
+
+  <form method="POST" action="{{ url_for('new_account') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="text" name="username" placeholder="Username" class="input-field" autocomplete="off" required><br>
+    <input type="password" name="password" placeholder="Password" class="input-field" autocomplete="new-password" required><br>
+    
+    <select name="security_question" class="input-field" required>
+      <option value="">Select a security question</option>
+      <option value="What was your first pet's name?">What was your first pet's name?</option>
+      <option value="What city were you born in?">What city were you born in?</option>
+      <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+      <option value="What was your first school's name?">What was your first school's name?</option>
+      <option value="What is your favorite color?">What is your favorite color?</option>
+    </select><br>
+    
+    <input type="text" name="security_answer" placeholder="Your answer" class="input-field" required><br>
+    <button type="submit" class="btn btn-primary">Create Account</button>
+    <a href="{{ url_for('login') }}" class="btn btn-primary">Back to Login</a>
+  </form>
+
+</body>
+</html>
+

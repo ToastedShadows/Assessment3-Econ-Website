@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='static.css') }}">
+</head>
+<body>
+
+  {% from "macros.html" import render_navbar, render_form_start, render_form_end, render_input %}
+  {{ render_navbar() }}
+
+  <h1 class="form-heading">Forgot Password</h1>
+
+  {{ render_form_start('forgor') }}
+    {{ render_input('username', placeholder='Username', value=username if username else '', required=true) }}<br>
+    
+    {% if security_question %}
+      <p>Security Question: {{ security_question }}</p>
+      {{ render_input('security_answer', placeholder='Your answer', required=true) }}<br>
+      {{ render_input('new_password', type='password', placeholder='New Password', required=true) }}<br>
+    {% endif %}
+    
+    <button type="submit" class="btn btn-primary">{{ security_question and 'Reset Password' or 'Continue' }}</button>
+    <a href="{{ url_for('login') }}" class="btn btn-primary">Back to Login</a>
+  {{ render_form_end() }}
+
+</body>
+</html>
