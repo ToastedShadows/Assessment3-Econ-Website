@@ -438,4 +438,5 @@ a:hover {
 
 .product-link:hover {
     color: #007bff;
-  
+    text-decoration: none;
+}
